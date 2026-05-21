@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from api.routes.upload_routes import router as upload_router
 
 app = FastAPI()
 
+app.include_router(upload_router)
+
 @app.get("/")
 def home():
-    return {"message": "Intelligent Tutor Backend Running"}
+    return {
+        "message": "Intelligent Tutor Backend Running"
+    }
