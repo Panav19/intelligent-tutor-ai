@@ -1,17 +1,13 @@
-import React from "react";
-
 function Navbar() {
 
     return (
 
-        <div
-            style={{
-                padding: "15px",
-                backgroundColor: "#282c34",
-                color: "white"
-            }}
-        >
-            <h1>Intelligent Tutor AI</h1>
+        <div className="bg-slate-900 border-b border-slate-700 px-6 py-4">
+
+            <h1 className="text-2xl font-bold text-cyan-400">
+                Intelligent Tutor AI
+            </h1>
+
         </div>
     );
 }

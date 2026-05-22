@@ -38,30 +38,37 @@ function ChatBox() {
 
     return (
 
-        <div>
+        <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
 
-            <h2>Ask Tutor</h2>
+            <h2 className="text-xl font-semibold mb-4">
+                Ask Intelligent Tutor
+            </h2>
 
             <textarea
                 rows="4"
-                cols="50"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="Ask any question..."
+                className="w-full p-4 rounded-lg bg-slate-700 text-white border border-slate-600"
             />
 
-            <br />
-
-            <button onClick={askQuestion}>
-                Ask
+            <button
+                onClick={askQuestion}
+                className="mt-4 bg-cyan-500 hover:bg-cyan-600 px-5 py-2 rounded-lg font-semibold"
+            >
+                Ask Tutor
             </button>
 
-            <div style={{ marginTop: "20px" }}>
+            <div className="mt-6 bg-slate-700 p-4 rounded-lg min-h-[120px]">
 
                 {loading ? (
-                    <p>Generating answer...</p>
+                    <p className="text-cyan-300">
+                        Generating answer...
+                    </p>
                 ) : (
-                    <p>{answer}</p>
+                    <p className="whitespace-pre-wrap">
+                        {answer}
+                    </p>
                 )}
 
             </div>
