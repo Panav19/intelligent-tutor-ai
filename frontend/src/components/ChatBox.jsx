@@ -1,17 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import API from "../services/api";
 
 function ChatBox() {
 
     const [question, setQuestion] = useState("");
 
-    const [answer, setAnswer] = useState("");
+    const [messages, setMessages] = useState([]);
 
     const [loading, setLoading] = useState(false);
 
+    const chatEndRef = useRef(null);
+
+    useEffect(() => {
+
+        chatEndRef.current?.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }, [messages]);
+
     const askQuestion = async () => {
 
-        if (!question) return;
+        if (!question.trim()) return;
+
+        const userMessage = {
+            type: "user",
+            text: question
+        };
+
+        setMessages((prev) => [...prev, userMessage]);
+
+        const currentQuestion = question;
+
+        setQuestion("");
 
         setLoading(true);
 
@@ -20,56 +41,131 @@ function ChatBox() {
             const response = await API.post(
                 "/ask",
                 {
-                    question: question
+                    question: currentQuestion
                 }
             );
 
-            setAnswer(response.data.answer);
+            const aiMessage = {
+                type: "ai",
+                text: response.data.answer
+            };
+
+            setMessages((prev) => [...prev, aiMessage]);
 
         } catch (error) {
 
             console.error(error);
 
-            setAnswer("Error generating response");
+            const errorMessage = {
+                type: "ai",
+                text: "Error generating response"
+            };
+
+            setMessages((prev) => [...prev, errorMessage]);
         }
 
         setLoading(false);
+    };
+
+    const handleKeyPress = (e) => {
+
+        if (e.key === "Enter" && !e.shiftKey) {
+
+            e.preventDefault();
+
+            askQuestion();
+        }
+    };
+
+    const clearChat = () => {
+        setMessages([]);
     };
 
     return (
 
         <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
 
-            <h2 className="text-xl font-semibold mb-4">
-                Ask Intelligent Tutor
-            </h2>
+            <div className="flex justify-between items-center mb-4">
 
-            <textarea
-                rows="4"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="Ask any question..."
-                className="w-full p-4 rounded-lg bg-slate-700 text-white border border-slate-600"
-            />
+                <h2 className="text-xl font-semibold">
+                    Intelligent Tutor Chat
+                </h2>
 
-            <button
-                onClick={askQuestion}
-                className="mt-4 bg-cyan-500 hover:bg-cyan-600 px-5 py-2 rounded-lg font-semibold"
-            >
-                Ask Tutor
-            </button>
+                <button
+                    onClick={clearChat}
+                    className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg"
+                >
+                    Clear Chat
+                </button>
 
-            <div className="mt-6 bg-slate-700 p-4 rounded-lg min-h-[120px]">
+            </div>
 
-                {loading ? (
-                    <p className="text-cyan-300">
-                        Generating answer...
-                    </p>
-                ) : (
-                    <p className="whitespace-pre-wrap">
-                        {answer}
-                    </p>
+            {/* CHAT AREA */}
+
+            <div className="h-[500px] overflow-y-auto bg-slate-900 rounded-lg p-4 space-y-4">
+
+                {messages.map((msg, index) => (
+
+                    <div
+                        key={index}
+                        className={`flex ${
+                            msg.type === "user"
+                                ? "justify-end"
+                                : "justify-start"
+                        }`}
+                    >
+
+                        <div
+                            className={`max-w-[75%] px-4 py-3 rounded-2xl whitespace-pre-wrap ${
+                                msg.type === "user"
+                                    ? "bg-cyan-500 text-white"
+                                    : "bg-slate-700 text-gray-100"
+                            }`}
+                        >
+
+                            {msg.text}
+
+                        </div>
+
+                    </div>
+                ))}
+
+                {loading && (
+
+                    <div className="flex justify-start">
+
+                        <div className="bg-slate-700 px-4 py-3 rounded-2xl">
+
+                            Thinking...
+
+                        </div>
+
+                    </div>
                 )}
+
+                <div ref={chatEndRef} />
+
+            </div>
+
+            {/* INPUT AREA */}
+
+            <div className="mt-4 flex gap-3">
+
+                <textarea
+                    rows="2"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    placeholder="Ask your tutor anything..."
+                    className="flex-1 p-4 rounded-lg bg-slate-700 text-white border border-slate-600 resize-none"
+                />
+
+                <button
+                    onClick={askQuestion}
+                    className="bg-cyan-500 hover:bg-cyan-600 px-6 rounded-lg font-semibold"
+                >
+                    Send
+                </button>
 
             </div>
 
