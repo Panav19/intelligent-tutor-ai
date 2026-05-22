@@ -6,7 +6,7 @@ import React, {
 
 import API from "../services/api";
 
-function ChatBox() {
+function ChatBox({ sessionId }) {
 
     const [question, setQuestion] = useState("");
 
@@ -16,17 +16,14 @@ function ChatBox() {
 
     const chatEndRef = useRef(null);
 
-    // SESSION ID
-
-    const sessionId = "student-session-1";
-
     // LOAD CHAT HISTORY
 
     useEffect(() => {
 
         loadChatHistory();
 
-    }, []);
+        // eslint-disable-next-line
+    }, [sessionId]);
 
     const loadChatHistory = async () => {
 
@@ -130,7 +127,7 @@ function ChatBox() {
 
     return (
 
-        <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
+        <div className="flex-1 bg-slate-800 p-6 rounded-xl shadow-lg">
 
             <h2 className="text-xl font-semibold mb-4">
                 Intelligent Tutor Chat

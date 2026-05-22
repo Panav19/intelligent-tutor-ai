@@ -1,8 +1,39 @@
+import { useState } from "react";
+
+import { v4 as uuidv4 } from "uuid";
+
 import Navbar from "./components/Navbar";
 import PDFUpload from "./components/PDFUpload";
 import ChatBox from "./components/ChatBox";
+import Sidebar from "./components/Sidebar";
 
 function App() {
+
+    const initialSession = uuidv4();
+
+    const [sessions, setSessions] = useState([
+        initialSession
+    ]);
+
+    const [currentSession, setCurrentSession] =
+        useState(initialSession);
+
+    const createNewChat = () => {
+
+        const newSession = uuidv4();
+
+        setSessions((prev) => [
+            newSession,
+            ...prev
+        ]);
+
+        setCurrentSession(newSession);
+    };
+
+    const switchSession = (sessionId) => {
+
+        setCurrentSession(sessionId);
+    };
 
     return (
 
@@ -10,11 +41,24 @@ function App() {
 
             <Navbar />
 
-            <div className="max-w-5xl mx-auto p-6 space-y-6">
+            <div className="flex h-[calc(100vh-80px)]">
 
-                <PDFUpload />
+                <Sidebar
+                    sessions={sessions}
+                    currentSession={currentSession}
+                    createNewChat={createNewChat}
+                    switchSession={switchSession}
+                />
 
-                <ChatBox />
+                <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+
+                    <PDFUpload />
+
+                    <ChatBox
+                        sessionId={currentSession}
+                    />
+
+                </div>
 
             </div>
 
