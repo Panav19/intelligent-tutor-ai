@@ -1,4 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+    useState,
+    useRef,
+    useEffect
+} from "react";
+
 import API from "../services/api";
 
 function ChatBox() {
@@ -10,6 +15,42 @@ function ChatBox() {
     const [loading, setLoading] = useState(false);
 
     const chatEndRef = useRef(null);
+
+    // SESSION ID
+
+    const sessionId = "student-session-1";
+
+    // LOAD CHAT HISTORY
+
+    useEffect(() => {
+
+        loadChatHistory();
+
+    }, []);
+
+    const loadChatHistory = async () => {
+
+        try {
+
+            const response = await API.get(
+                `/chat-history/${sessionId}`
+            );
+
+            setMessages(
+                response.data.messages.map((msg) => ({
+                    type:
+                        msg.role === "user"
+                            ? "user"
+                            : "ai",
+                    text: msg.message
+                }))
+            );
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
 
@@ -28,7 +69,10 @@ function ChatBox() {
             text: question
         };
 
-        setMessages((prev) => [...prev, userMessage]);
+        setMessages((prev) => [
+            ...prev,
+            userMessage
+        ]);
 
         const currentQuestion = question;
 
@@ -41,7 +85,8 @@ function ChatBox() {
             const response = await API.post(
                 "/ask",
                 {
-                    question: currentQuestion
+                    question: currentQuestion,
+                    session_id: sessionId
                 }
             );
 
@@ -50,7 +95,10 @@ function ChatBox() {
                 text: response.data.answer
             };
 
-            setMessages((prev) => [...prev, aiMessage]);
+            setMessages((prev) => [
+                ...prev,
+                aiMessage
+            ]);
 
         } catch (error) {
 
@@ -61,7 +109,10 @@ function ChatBox() {
                 text: "Error generating response"
             };
 
-            setMessages((prev) => [...prev, errorMessage]);
+            setMessages((prev) => [
+                ...prev,
+                errorMessage
+            ]);
         }
 
         setLoading(false);
@@ -77,30 +128,13 @@ function ChatBox() {
         }
     };
 
-    const clearChat = () => {
-        setMessages([]);
-    };
-
     return (
 
         <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
 
-            <div className="flex justify-between items-center mb-4">
-
-                <h2 className="text-xl font-semibold">
-                    Intelligent Tutor Chat
-                </h2>
-
-                <button
-                    onClick={clearChat}
-                    className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg"
-                >
-                    Clear Chat
-                </button>
-
-            </div>
-
-            {/* CHAT AREA */}
+            <h2 className="text-xl font-semibold mb-4">
+                Intelligent Tutor Chat
+            </h2>
 
             <div className="h-[500px] overflow-y-auto bg-slate-900 rounded-lg p-4 space-y-4">
 
@@ -146,8 +180,6 @@ function ChatBox() {
                 <div ref={chatEndRef} />
 
             </div>
-
-            {/* INPUT AREA */}
 
             <div className="mt-4 flex gap-3">
 

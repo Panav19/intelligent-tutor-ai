@@ -1,11 +1,12 @@
 from rag.retriever import get_retriever
 from rag.llm import get_llm
+from rag.memory import save_message
 
-def ask_question(question):
+retriever = get_retriever()
 
-    retriever = get_retriever()
+llm = get_llm()
 
-    llm = get_llm()
+def ask_question(question, session_id):
 
     docs = retriever.invoke(question)
 
@@ -28,6 +29,20 @@ Answer:
 """
 
     response = llm.invoke(prompt)
+
+    # SAVE USER MESSAGE
+    save_message(
+        session_id,
+        "user",
+        question
+    )
+
+    # SAVE AI RESPONSE
+    save_message(
+        session_id,
+        "assistant",
+        response
+    )
 
     return {
         "answer": response,
