@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
 
 from rag.pdf_loader import load_pdf
@@ -9,6 +9,12 @@ router = APIRouter()
 
 @router.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
+
+    if not file.filename.endswith(".pdf"):
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF files are allowed"
+        )
 
     file_path = f"uploads/{file.filename}"
 
