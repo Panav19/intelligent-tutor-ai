@@ -1,9 +1,11 @@
 from langchain_ollama import OllamaLLM
 
-def get_llm():
+# GLOBAL LLM
 
-    llm = OllamaLLM(
-        model="llama3"
-    )
+llm = OllamaLLM(
+    model="llama3"
+)
+
+def get_llm():
 
     return llm
