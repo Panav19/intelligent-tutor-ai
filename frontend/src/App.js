@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -7,27 +7,69 @@ import PDFUpload from "./components/PDFUpload";
 import ChatBox from "./components/ChatBox";
 import Sidebar from "./components/Sidebar";
 
+import API from "./services/api";
+
 function App() {
 
-    const initialSession = uuidv4();
-
-    const [sessions, setSessions] = useState([
-        initialSession
-    ]);
+    const [sessions, setSessions] = useState([]);
 
     const [currentSession, setCurrentSession] =
-        useState(initialSession);
+        useState("");
+
+    // LOAD SESSIONS
+
+    useEffect(() => {
+
+        loadSessions();
+
+        // eslint-disable-next-line
+    }, []);
+
+    const loadSessions = async () => {
+
+        try {
+
+            const response = await API.get("/sessions");
+
+            const loadedSessions =
+                response.data.sessions;
+
+            setSessions(loadedSessions);
+
+            if (loadedSessions.length > 0) {
+
+                setCurrentSession(
+                    loadedSessions[0].session_id
+                );
+
+            } else {
+
+                createNewChat();
+            }
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
 
     const createNewChat = () => {
 
-        const newSession = uuidv4();
+        const newSession = {
+            session_id: uuidv4(),
+            title: `Chat ${
+                sessions.length + 1
+            }`
+        };
 
         setSessions((prev) => [
             newSession,
             ...prev
         ]);
 
-        setCurrentSession(newSession);
+        setCurrentSession(
+            newSession.session_id
+        );
     };
 
     const switchSession = (sessionId) => {
@@ -54,9 +96,13 @@ function App() {
 
                     <PDFUpload />
 
-                    <ChatBox
-                        sessionId={currentSession}
-                    />
+                    {currentSession && (
+
+                        <ChatBox
+                            sessionId={currentSession}
+                        />
+
+                    )}
 
                 </div>
 

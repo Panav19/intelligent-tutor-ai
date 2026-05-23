@@ -21,16 +21,16 @@ function Sidebar({
                 {sessions.map((session) => (
 
                     <div
-                        key={session}
-                        onClick={() => switchSession(session)}
+                        key={session.session_id}
+                        onClick={() => switchSession(session.session_id)}
                         className={`p-3 rounded-lg cursor-pointer transition ${
-                            currentSession === session
+                            currentSession === session.session_id
                                 ? "bg-slate-700"
                                 : "bg-slate-800 hover:bg-slate-700"
                         }`}
                     >
 
-                        {session.slice(0, 20)}...
+                        {session.title}
 
                     </div>
                 ))}
