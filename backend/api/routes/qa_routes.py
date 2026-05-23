@@ -5,7 +5,8 @@ from rag.qa_chain import ask_question
 from rag.memory import get_chat_history
 from rag.session_manager import (
     create_session,
-    get_all_sessions
+    get_all_sessions,
+    update_session_title
 )
 
 router = APIRouter()
@@ -18,6 +19,23 @@ class QuestionRequest(BaseModel):
 async def ask(request: QuestionRequest):
 
     create_session(request.session_id)
+
+    # UPDATE TITLE USING FIRST QUESTION
+
+    session = next(
+        (
+            s for s in get_all_sessions()
+            if s["session_id"] == request.session_id
+        ),
+        None
+    )
+
+    if session and session["title"] == "New Chat":
+
+        update_session_title(
+            request.session_id,
+            request.question
+        )
 
     response = ask_question(
         request.question,

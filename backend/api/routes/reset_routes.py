@@ -3,6 +3,7 @@ import shutil
 import os
 
 from database.mongo import chat_collection
+from database.mongo import session_collection
 
 router = APIRouter()
 
@@ -22,6 +23,10 @@ async def reset_knowledge_base():
     # CLEAR CHAT HISTORY
 
     chat_collection.delete_many({})
+
+    # CLEAR SESSION HISTORY
+
+    session_collection.delete_many({})
 
     return {
         "message": "Knowledge base reset successfully"

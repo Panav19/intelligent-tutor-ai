@@ -27,3 +27,23 @@ def get_all_sessions():
     )
 
     return sessions
+
+def update_session_title(
+    session_id,
+    question
+):
+
+    # SHORTEN TITLE
+
+    title = question[:40]
+
+    session_collection.update_one(
+        {
+            "session_id": session_id
+        },
+        {
+            "$set": {
+                "title": title
+            }
+        }
+    )
