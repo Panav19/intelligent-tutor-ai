@@ -6,7 +6,8 @@ from rag.memory import get_chat_history
 from rag.session_manager import (
     create_session,
     get_all_sessions,
-    update_session_title
+    update_session_title,
+    get_session
 )
 
 router = APIRouter()
@@ -22,12 +23,8 @@ async def ask(request: QuestionRequest):
 
     # UPDATE TITLE USING FIRST QUESTION
 
-    session = next(
-        (
-            s for s in get_all_sessions()
-            if s["session_id"] == request.session_id
-        ),
-        None
+    session = get_session(
+        request.session_id
     )
 
     if session and session["title"] == "New Chat":

@@ -47,3 +47,10 @@ def update_session_title(
             }
         }
     )
+
+def get_session(session_id):
+
+    return session_collection.find_one(
+        {"session_id": session_id},
+        {"_id": 0}
+    )
