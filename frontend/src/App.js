@@ -7,6 +7,7 @@ import PDFUpload from "./components/PDFUpload";
 import ChatBox from "./components/ChatBox";
 import Sidebar from "./components/Sidebar";
 import AssignmentGenerator from "./components/AssignmentGenerator";
+import WorkspaceNavbar from "./components/WorkspaceNavbar";
 
 import API from "./services/api";
 
@@ -16,6 +17,9 @@ function App() {
 
     const [currentSession, setCurrentSession] =
         useState("");
+
+    const [activeView, setActiveView] =
+        useState("tutor");
 
     // LOAD SESSIONS
 
@@ -95,11 +99,32 @@ function App() {
 
                 <div className="flex-1 p-6 space-y-6 overflow-y-auto">
 
-                    <PDFUpload />
+                    {/* WORKSPACE NAVBAR */}
 
-                    <AssignmentGenerator />
+                    <WorkspaceNavbar
+                        activeView={activeView}
+                        setActiveView={setActiveView}
+                    />
 
-                    {currentSession && (
+                    {/* UPLOAD VIEW */}
+
+                    {activeView === "upload" && (
+
+                        <PDFUpload />
+
+                    )}
+
+                    {/* ASSIGNMENTS VIEW */}
+
+                    {activeView === "assignments" && (
+
+                        <AssignmentGenerator />
+
+                    )}
+
+                    {/* TUTOR VIEW */}
+
+                    {activeView === "tutor" && currentSession && (
 
                         <ChatBox
                             sessionId={currentSession}
