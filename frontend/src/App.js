@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import PDFUpload from "./components/PDFUpload";
 import ChatBox from "./components/ChatBox";
 import Sidebar from "./components/Sidebar";
+import AssignmentGenerator from "./components/AssignmentGenerator";
 
 import API from "./services/api";
 
@@ -95,6 +96,8 @@ function App() {
                 <div className="flex-1 p-6 space-y-6 overflow-y-auto">
 
                     <PDFUpload />
+
+                    <AssignmentGenerator />
 
                     {currentSession && (
 
