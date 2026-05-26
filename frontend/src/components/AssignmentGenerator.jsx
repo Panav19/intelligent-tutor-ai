@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
+
+import AssignmentHistory from "./AssignmentHistory";
 
 import API from "../services/api";
 
@@ -17,6 +20,36 @@ function AssignmentGenerator() {
 
     const [loading, setLoading] =
         useState(false);
+
+    const [assignmentHistory, setAssignmentHistory] =
+        useState([]);
+
+    const [selectedAssignment, setSelectedAssignment] =
+        useState(null);
+
+    useEffect(() => {
+
+        loadAssignments();
+
+    }, []);
+
+    const loadAssignments = async () => {
+
+        try {
+ 
+            const response = await API.get(
+                "/assignments"
+            );
+
+            setAssignmentHistory(
+                response.data.assignments
+            );
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
 
     const generateAssignment = async () => {
 
@@ -39,6 +72,8 @@ function AssignmentGenerator() {
                 response.data.assignment
             );
 
+            loadAssignments();
+
         } catch (error) {
 
             console.error(error);
@@ -53,105 +88,124 @@ function AssignmentGenerator() {
 
     return (
 
-        <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
+        <div className="grid grid-cols-3 gap-6">
 
-            <h2 className="text-2xl font-bold mb-6 text-cyan-400">
-                Assignment Generator
-            </h2>
+            {/* GENERATOR */}
 
-            <div className="space-y-4">
+            <div className="col-span-2 bg-slate-800 p-6 rounded-xl shadow-lg">
+
+                <h2 className="text-2xl font-bold mb-6 text-cyan-400">
+
+                    Assignment Generator
+
+                </h2>
+
+                <div className="space-y-4">
 
                 {/* TOPIC */}
 
-                <div>
+                    <div>
 
-                    <label className="block mb-2">
-                        Topic
-                    </label>
+                        <label className="block mb-2">
+                            Topic
+                        </label>
 
-                    <input
-                        type="text"
-                        value={topic}
-                        onChange={(e) =>
-                            setTopic(e.target.value)
-                        }
-                        placeholder="Enter topic..."
-                        className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
-                    />
+                        <input
+                            type="text"
+                            value={topic}
+                            onChange={(e) =>
+                                setTopic(e.target.value)
+                            }
+                            placeholder="Enter topic..."
+                            className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
+                        />
 
-                </div>
+                    </div>
 
                 {/* DIFFICULTY */}
 
-                <div>
+                    <div>
 
-                    <label className="block mb-2">
-                        Difficulty
-                    </label>
+                        <label className="block mb-2">
+                            Difficulty
+                        </label>
 
-                    <select
-                        value={difficulty}
-                        onChange={(e) =>
-                            setDifficulty(
-                                e.target.value
-                            )
-                        }
-                        className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
-                    >
+                        <select
+                            value={difficulty}
+                            onChange={(e) =>
+                                setDifficulty(
+                                    e.target.value
+                                )
+                            }
+                            className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
+                        >
 
-                        <option>Easy</option>
+                            <option>Easy</option>
 
-                        <option>Medium</option>
+                            <option>Medium</option>
 
-                        <option>Hard</option>
+                            <option>Hard</option>
 
-                    </select>
+                        </select>
 
-                </div>
+                    </div>
 
                 {/* QUESTION COUNT */}
 
-                <div>
+                    <div>
 
-                    <label className="block mb-2">
-                        Number of Questions
-                    </label>
+                        <label className="block mb-2">
+                            Number of Questions
+                        </label>
 
-                    <input
-                        type="number"
-                        value={numQuestions}
-                        onChange={(e) =>
-                            setNumQuestions(
-                                e.target.value
-                            )
-                        }
-                        className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
-                    />
+                        <input
+                            type="number"
+                            value={numQuestions}
+                            onChange={(e) =>
+                                setNumQuestions(
+                                    e.target.value
+                                )
+                            }
+                            className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
+                        />
 
-                </div>
+                    </div>
 
                 {/* BUTTON */}
 
-                <button
-                    onClick={generateAssignment}
-                    className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-lg font-semibold"
-                >
+                    <button
+                        onClick={generateAssignment}
+                        className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-lg font-semibold"
+                    >
 
-                    Generate Assignment
+                        Generate Assignment
 
-                </button>
+                    </button>
+
+                </div>
+
+                {/* OUTPUT */}
+
+                <div className="mt-8 bg-slate-900 p-6 rounded-lg min-h-[300px] whitespace-pre-wrap">
+
+                    {loading
+                        ? "Generating assignment..."
+                        : selectedAssignment
+                        ? selectedAssignment.assignment
+                        : assignment}
+
+                </div>
 
             </div>
 
-            {/* OUTPUT */}
+            {/* HISTORY */}
 
-            <div className="mt-8 bg-slate-900 p-6 rounded-lg min-h-[250px] whitespace-pre-wrap">
-
-                {loading
-                    ? "Generating assignment..."
-                    : assignment}
-
-            </div>
+            <AssignmentHistory
+                assignments={assignmentHistory}
+                selectAssignment={
+                    setSelectedAssignment
+                }
+            />
 
         </div>
     );

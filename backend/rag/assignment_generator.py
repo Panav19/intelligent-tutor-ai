@@ -57,3 +57,14 @@ Requirements:
     )
 
     return assignment
+
+def get_all_assignments():
+
+    assignments = list(
+        assignment_collection.find(
+            {},
+            {"_id": 0}
+        ).sort("created_at", -1)
+    )
+
+    return assignments

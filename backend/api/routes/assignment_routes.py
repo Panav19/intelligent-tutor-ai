@@ -2,7 +2,8 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from rag.assignment_generator import (
-    generate_assignment
+    generate_assignment,
+    get_all_assignments
 )
 
 router = APIRouter()
@@ -26,4 +27,11 @@ async def create_assignment(
 
     return {
         "assignment": assignment
+    }
+
+@router.get("/assignments")
+async def assignments():
+
+    return {
+        "assignments": get_all_assignments()
     }
