@@ -14,6 +14,8 @@ function ChatBox({ sessionId }) {
 
     const [loading, setLoading] = useState(false);
 
+    const [error, setError] = useState("");
+
     const chatEndRef = useRef(null);
 
     // LOAD CHAT HISTORY
@@ -59,7 +61,14 @@ function ChatBox({ sessionId }) {
 
     const askQuestion = async () => {
 
-        if (!question.trim()) return;
+        if (!question.trim()) {
+
+            setError("Please enter a message");
+
+            return;
+        }
+
+        setError("");
 
         const userMessage = {
             type: "user",
@@ -197,6 +206,16 @@ function ChatBox({ sessionId }) {
                 </button>
 
             </div>
+
+            {error && (
+
+                <p className="text-red-400 mt-2">
+
+                    {error}
+
+                </p>
+
+            )}
 
         </div>
     );

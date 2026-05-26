@@ -79,6 +79,8 @@ function App() {
     const switchSession = (sessionId) => {
 
         setCurrentSession(sessionId);
+
+        setActiveView("tutor");
     };
 
     return (

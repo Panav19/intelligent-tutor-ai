@@ -7,7 +7,8 @@ import API from "../services/api";
 
 function AssignmentGenerator() {
 
-    const [topic, setTopic] = useState("");
+    const [topic, setTopic] =
+        useState("");
 
     const [difficulty, setDifficulty] =
         useState("Medium");
@@ -26,6 +27,9 @@ function AssignmentGenerator() {
 
     const [selectedAssignment, setSelectedAssignment] =
         useState(null);
+
+    const [error, setError] =
+        useState("");
 
     useEffect(() => {
 
@@ -53,7 +57,14 @@ function AssignmentGenerator() {
 
     const generateAssignment = async () => {
 
-        if (!topic.trim()) return;
+        if (!topic.trim()) {
+
+            setError("Please enter a topic");
+
+            return;
+        }
+
+        setError("");
 
         setLoading(true);
 
@@ -119,6 +130,16 @@ function AssignmentGenerator() {
                             placeholder="Enter topic..."
                             className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
                         />
+
+                        {error && (
+
+                            <p className="text-red-400 mt-2">
+
+                                {error}
+
+                            </p>
+
+                        )}
 
                     </div>
 
