@@ -7,7 +7,6 @@ import PDFUpload from "./components/PDFUpload";
 import ChatBox from "./components/ChatBox";
 import Sidebar from "./components/Sidebar";
 import AssignmentGenerator from "./components/AssignmentGenerator";
-import WorkspaceNavbar from "./components/WorkspaceNavbar";
 
 import API from "./services/api";
 
@@ -95,16 +94,12 @@ function App() {
                     currentSession={currentSession}
                     createNewChat={createNewChat}
                     switchSession={switchSession}
+
+                    activeView={activeView}
+                    setActiveView={setActiveView}
                 />
 
                 <div className="flex-1 p-6 space-y-6 overflow-y-auto">
-
-                    {/* WORKSPACE NAVBAR */}
-
-                    <WorkspaceNavbar
-                        activeView={activeView}
-                        setActiveView={setActiveView}
-                    />
 
                     {/* UPLOAD VIEW */}
 
