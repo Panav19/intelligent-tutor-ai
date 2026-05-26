@@ -9,3 +9,5 @@ db = client["intelligent_tutor"]
 chat_collection = db["chat_history"]
 
 session_collection = db["sessions"]
+
+assignment_collection = db["assignments"]
