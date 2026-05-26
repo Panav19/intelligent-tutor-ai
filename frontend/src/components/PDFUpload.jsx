@@ -1,18 +1,35 @@
 import React, { useState } from "react";
+
 import API from "../services/api";
 
 function PDFUpload() {
 
     const [file, setFile] = useState(null);
 
-    const [message, setMessage] = useState("");
+    const [message, setMessage] =
+        useState("");
+
+    const [loading, setLoading] =
+        useState(false);
 
     const handleUpload = async () => {
 
         if (!file) {
+
             alert("Please select a PDF");
+
             return;
         }
+
+        // PREVENT MULTIPLE CLICKS
+
+        if (loading) return;
+
+        setLoading(true);
+
+        setMessage(
+            "Uploading PDF and generating embeddings..."
+        );
 
         const formData = new FormData();
 
@@ -25,48 +42,94 @@ function PDFUpload() {
                 formData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data"
+                        "Content-Type":
+                            "multipart/form-data"
                     }
                 }
             );
 
-            setMessage(response.data.message);
+            setMessage(
+                response.data.message
+            );
 
         } catch (error) {
 
             console.error(error);
 
-            setMessage("Upload failed");
+            setMessage(
+                "Upload failed"
+            );
         }
+
+        setLoading(false);
     };
 
     return (
 
         <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
 
-            <h2 className="text-xl font-semibold mb-4">
+            <h2 className="text-2xl font-bold mb-6 text-cyan-400">
+
                 Upload Study Material
+
             </h2>
 
             <input
                 type="file"
                 accept=".pdf"
-                onChange={(e) => setFile(e.target.files[0])}
-                className="mb-4"
+                onChange={(e) =>
+                    setFile(e.target.files[0])
+                }
+                className="mb-4 block"
             />
 
-            <br />
+            {/* FILE NAME */}
+
+            {file && (
+
+                <p className="mb-4 text-gray-300">
+
+                    Selected File:
+                    {" "}
+                    {file.name}
+
+                </p>
+
+            )}
+
+            {/* BUTTON */}
 
             <button
                 onClick={handleUpload}
-                className="bg-cyan-500 hover:bg-cyan-600 px-5 py-2 rounded-lg font-semibold"
+                disabled={loading}
+                className={`px-6 py-3 rounded-lg font-semibold transition ${
+                    loading
+                        ? "bg-gray-600 cursor-not-allowed"
+                        : "bg-cyan-500 hover:bg-cyan-600"
+                }`}
             >
-                Upload PDF
+
+                {loading
+                    ? "Processing..."
+                    : "Upload PDF"}
+
             </button>
 
-            <p className="mt-4 text-green-400">
-                {message}
-            </p>
+            {/* STATUS */}
+
+            <div className="mt-6">
+
+                <p className={`${
+                    loading
+                        ? "text-yellow-400"
+                        : "text-green-400"
+                }`}>
+
+                    {message}
+
+                </p>
+
+            </div>
 
         </div>
     );
