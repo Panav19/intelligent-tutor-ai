@@ -11,3 +11,5 @@ chat_collection = db["chat_history"]
 session_collection = db["sessions"]
 
 assignment_collection = db["assignments"]
+
+quiz_collection = db["quizzes"]
