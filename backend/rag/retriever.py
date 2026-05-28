@@ -18,7 +18,8 @@ vector_store = Chroma(
 # RETRIEVER
 
 retriever = vector_store.as_retriever(
-    search_kwargs={"k": 8}
+    search_type="mmr",
+    search_kwargs={"k": 4}
 )
 
 def get_retriever():
