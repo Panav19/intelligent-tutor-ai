@@ -24,7 +24,20 @@ def generate_quiz(
     prompt = f"""
 You are an expert college examiner.
 
-Generate a {difficulty} level multiple-choice quiz on:
+Generate EXACTLY {num_questions} multiple-choice questions (MCQs).
+
+STRICT RULES:
+- Generate EXACTLY {num_questions} questions
+- Do NOT generate fewer questions
+- Do NOT generate more questions
+- Every question MUST contain:
+    - Question statement
+    - 4 options (A, B, C, D)
+    - Correct answer
+- Do NOT include explanations
+- Do NOT include introductions
+- Do NOT include conclusions
+- Output ONLY the quiz
 
 Topic:
 {topic}
@@ -32,22 +45,25 @@ Topic:
 Context:
 {context}
 
-Requirements:
-- Generate exactly {num_questions} MCQs
-- Each question must have 4 options
-- Clearly indicate the correct answer
-- Make questions suitable for college students
+Required Format:
 
-Format:
+1. Question text
 
-1. Question
+A. Option
+B. Option
+C. Option
+D. Option
 
-A.
-B.
-C.
-D.
+Correct Answer: A
 
-Correct Answer:
+2. Question text
+
+A. Option
+B. Option
+C. Option
+D. Option
+
+Correct Answer: B
 """
 
     quiz = llm.invoke(prompt)
