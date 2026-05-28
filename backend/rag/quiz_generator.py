@@ -1,11 +1,13 @@
-from rag.retriever import get_retriever
+from rag.retriever import (
+    get_vector_store
+)
 from rag.llm import get_llm
 
 from database.mongo import quiz_collection
 
 from datetime import datetime
 
-retriever = get_retriever()
+vector_store = get_vector_store()
 
 llm = get_llm()
 
@@ -15,16 +17,39 @@ def generate_quiz(
     num_questions
 ):
 
-    docs = retriever.invoke(topic)
+    results = vector_store.similarity_search_with_score(
+        topic,
+        k=8
+    )
+
+    relevant_docs = []
+
+    for doc, score in results:
+
+        print(f"Similarity Score: {score}")
+
+        # LOWER SCORE = BETTER MATCH
+
+        if score < 1.0:
+
+            relevant_docs.append(doc)
+
+    # NO RELEVANT CONTENT FOUND
+
+    if len(relevant_docs) == 0:
+
+        return {
+            "error": "Topic not found in uploaded PDFs"
+        }
 
     context = "\n\n".join(
-        [doc.page_content for doc in docs]
+        [doc.page_content for doc in relevant_docs]
     )
 
     prompt = f"""
 You are an expert college examiner.
 
-Generate EXACTLY {num_questions} multiple-choice questions (MCQs).
+Generate EXACTLY {num_questions} multiple-choice questions (MCQs) ONLY from the provided context.
 
 STRICT RULES:
 - Generate EXACTLY {num_questions} questions

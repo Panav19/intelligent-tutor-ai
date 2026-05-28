@@ -1,11 +1,13 @@
-from rag.retriever import get_retriever
+from rag.retriever import (
+    get_vector_store
+)
 from rag.llm import get_llm
 
 from database.mongo import assignment_collection
 
 from datetime import datetime
 
-retriever = get_retriever()
+vector_store = get_vector_store()
 
 llm = get_llm()
 
@@ -15,31 +17,66 @@ def generate_assignment(
     num_questions
 ):
 
-    docs = retriever.invoke(topic)
+    results = vector_store.similarity_search_with_score(
+        topic,
+        k=8
+    )
+
+    relevant_docs = []
+
+    for doc, score in results:
+
+        print(f"Assignment Similarity Score: {score}")
+
+        if score < 1.0:
+
+            relevant_docs.append(doc)
+
+    # NO RELEVANT CONTENT
+
+    if len(relevant_docs) == 0:
+
+        return {
+            "error": "Topic not found in uploaded PDFs"
+        }
 
     context = "\n\n".join(
-        [doc.page_content for doc in docs]
+        [doc.page_content for doc in relevant_docs]
     )
 
     prompt = f"""
 You are an expert college faculty member.
 
-Generate a {difficulty} level assignment on:
+Generate EXACTLY {num_questions} assignment questions ONLY from the provided context.
+
+STRICT RULES:
+- Generate EXACTLY {num_questions} questions
+- Do NOT generate fewer questions
+- Do NOT generate more questions
+- Questions must be descriptive theory questions
+- Do NOT generate MCQs
+- Do NOT include answers
+- Do NOT include explanations
+- Do NOT include marks
+- Do NOT include introductions
+- Do NOT include conclusions
+- Number all questions properly
+- Questions must match {difficulty} difficulty level
+- Questions must be suitable for college students
 
 Topic:
 {topic}
 
-Use the provided context.
-
 Context:
 {context}
 
-Requirements:
-- Generate exactly {num_questions} questions
-- Questions should be educational
-- Include conceptual and analytical questions
-- Number all questions properly
-- Make questions suitable for college students
+Required Format:
+
+1. Question text
+
+2. Question text
+
+3. Question text
 """
 
     assignment = llm.invoke(prompt)

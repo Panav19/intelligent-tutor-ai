@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import AssignmentHistory from "./AssignmentHistory";
 
@@ -40,7 +39,7 @@ function AssignmentGenerator() {
     const loadAssignments = async () => {
 
         try {
- 
+
             const response = await API.get(
                 "/assignments"
             );
@@ -57,6 +56,8 @@ function AssignmentGenerator() {
 
     const generateAssignment = async () => {
 
+        // VALIDATE TOPIC
+
         if (!topic.trim()) {
 
             setError("Please enter a topic");
@@ -65,6 +66,10 @@ function AssignmentGenerator() {
         }
 
         setError("");
+
+        // CLEAR PREVIOUS SELECTION
+
+        setSelectedAssignment(null);
 
         setLoading(true);
 
@@ -79,11 +84,24 @@ function AssignmentGenerator() {
                 }
             );
 
-            setAssignment(
-                response.data.assignment
-            );
+            // HANDLE BACKEND ERROR RESPONSE
 
-            loadAssignments();
+            if (
+                response.data.assignment.error
+            ) {
+
+                setAssignment(
+                    response.data.assignment.error
+                );
+
+            } else {
+
+                setAssignment(
+                    response.data.assignment
+                );
+
+                loadAssignments();
+            }
 
         } catch (error) {
 
@@ -113,7 +131,7 @@ function AssignmentGenerator() {
 
                 <div className="space-y-4">
 
-                {/* TOPIC */}
+                    {/* TOPIC */}
 
                     <div>
 
@@ -143,7 +161,7 @@ function AssignmentGenerator() {
 
                     </div>
 
-                {/* DIFFICULTY */}
+                    {/* DIFFICULTY */}
 
                     <div>
 
@@ -171,7 +189,7 @@ function AssignmentGenerator() {
 
                     </div>
 
-                {/* QUESTION COUNT */}
+                    {/* QUESTION COUNT */}
 
                     <div>
 
@@ -192,14 +210,26 @@ function AssignmentGenerator() {
 
                     </div>
 
-                {/* BUTTON */}
+                    {/* BUTTON */}
 
                     <button
                         onClick={generateAssignment}
-                        className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-lg font-semibold"
+                        disabled={loading}
+                        className="
+                            bg-cyan-500
+                            hover:bg-cyan-600
+                            disabled:bg-slate-600
+                            px-6
+                            py-3
+                            rounded-lg
+                            font-semibold
+                            transition
+                        "
                     >
 
-                        Generate Assignment
+                        {loading
+                            ? "Generating..."
+                            : "Generate Assignment"}
 
                     </button>
 
@@ -221,7 +251,10 @@ function AssignmentGenerator() {
 
             {/* HISTORY */}
 
-            <div className="w-80">
+            <div className="
+                w-80
+                flex
+            ">
 
                 <AssignmentHistory
                     assignments={assignmentHistory}

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
+import os
 
 from rag.pdf_loader import load_pdf
 from rag.chunking import split_documents
@@ -15,6 +16,10 @@ async def upload_pdf(file: UploadFile = File(...)):
             status_code=400,
             detail="Only PDF files are allowed"
         )
+
+    # CREATE UPLOADS FOLDER IF MISSING
+
+    os.makedirs("uploads", exist_ok=True)
 
     file_path = f"uploads/{file.filename}"
 
