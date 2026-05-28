@@ -72,9 +72,34 @@ function App() {
 
             if (loadedSessions.length > 0) {
 
-                setCurrentSession(
-                    loadedSessions[0].session_id
-                );
+                const savedSession =
+                    localStorage.getItem(
+                        "currentSession"
+                    );
+
+                // CHECK IF SAVED SESSION EXISTS
+
+                const sessionExists =
+                    loadedSessions.some(
+                        (session) =>
+                            session.session_id ===
+                            savedSession
+                    );
+
+                if (savedSession && sessionExists) {
+
+                    setCurrentSession(
+                        savedSession
+                    );
+
+                } else {
+
+                    // FALLBACK TO LATEST SESSION
+
+                    setCurrentSession(
+                        loadedSessions[0].session_id
+                    );
+                }
 
             } else {
 
