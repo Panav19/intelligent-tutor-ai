@@ -82,34 +82,54 @@ function PDFUpload() {
 
             <div className="border-2 border-dashed border-cyan-500 rounded-2xl p-10 text-center bg-slate-900">
 
-                <p className="text-lg mb-4 text-gray-300">
+                <label
+                    htmlFor="pdfUpload"
+                    className="border-2 border-dashed border-cyan-500 rounded-2xl p-10 bg-slate-900 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition"
+                >
 
-                    Select a PDF to build your AI tutor knowledge base
+                    <div className="text-6xl mb-4">
 
-                </p>
+                        📄
+
+                    </div>
+
+                    <p className="text-xl font-semibold text-cyan-300">
+
+                        Click to Select PDF
+
+                    </p>
+
+                    <p className="text-gray-400 mt-2">
+
+                        Upload study material for your AI tutor
+
+                    </p>
+
+                </label>
 
                 <input
                     type="file"
                     accept=".pdf"
+                    id="pdfUpload"
                     onChange={(e) =>
                         setFile(e.target.files[0])
                     }
-                    className="mb-4"
+                    className="hidden"
                 />
 
             {/* FILE NAME */}
 
                 {file && (
 
-                    <div className="mt-4">
+                    <div className="mt-6 bg-slate-900 p-4 rounded-xl border border-slate-700">
 
-                        <p className="text-cyan-300 font-semibold">
+                        <p className="text-cyan-400 font-semibold">
 
                             Selected File:
 
                         </p>
 
-                        <p className="text-gray-300">
+                        <p className="text-gray-300 mt-2">
 
                             {file.name}
 

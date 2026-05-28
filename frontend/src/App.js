@@ -15,7 +15,13 @@ function App() {
     const [sessions, setSessions] = useState([]);
 
     const [currentSession, setCurrentSession] =
-        useState("");
+        useState(
+
+            localStorage.getItem(
+                "currentSession"
+            ) || ""
+
+        );
 
     const [activeView, setActiveView] =
         useState(
@@ -43,6 +49,15 @@ function App() {
         );
 
     }, [activeView]);
+
+    useEffect(() => {
+
+        localStorage.setItem(
+            "currentSession",
+            currentSession
+        );
+
+    }, [currentSession]);
 
     const loadSessions = async () => {
 

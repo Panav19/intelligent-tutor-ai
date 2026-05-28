@@ -86,7 +86,7 @@ function Sidebar({
 
                 <h2 className="text-lg font-bold mb-3 text-cyan-400">
 
-                    Sessions
+                    Conversations
 
                 </h2>
 
