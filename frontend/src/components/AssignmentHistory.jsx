@@ -5,7 +5,7 @@ function AssignmentHistory({
 
     return (
 
-        <div className="bg-slate-800 p-4 rounded-xl shadow-lg">
+        <div className="bg-slate-800 p-4 rounded-xl shadow-lg h-full flex flex-col">
 
             <h2 className="text-xl font-bold mb-4 text-cyan-400">
 
@@ -13,7 +13,7 @@ function AssignmentHistory({
 
             </h2>
 
-            <div className="space-y-3 max-h-[400px] overflow-y-auto">
+            <div className="space-y-3 overflow-y-auto flex-1">
 
                 {assignments.map(
                     (assignment, index) => (

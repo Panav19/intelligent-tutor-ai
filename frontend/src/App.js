@@ -18,7 +18,13 @@ function App() {
         useState("");
 
     const [activeView, setActiveView] =
-        useState("tutor");
+        useState(
+
+            localStorage.getItem(
+                "activeView"
+            ) || "tutor"
+
+        );
 
     // LOAD SESSIONS
 
@@ -28,6 +34,15 @@ function App() {
 
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+
+        localStorage.setItem(
+            "activeView",
+            activeView
+        );
+
+    }, [activeView]);
 
     const loadSessions = async () => {
 

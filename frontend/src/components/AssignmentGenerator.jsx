@@ -99,11 +99,11 @@ function AssignmentGenerator() {
 
     return (
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="flex gap-6 items-stretch">
 
             {/* GENERATOR */}
 
-            <div className="col-span-2 bg-slate-800 p-6 rounded-xl shadow-lg">
+            <div className="flex-1 bg-slate-800 p-6 rounded-xl shadow-lg">
 
                 <h2 className="text-2xl font-bold mb-6 text-cyan-400">
 
@@ -221,12 +221,16 @@ function AssignmentGenerator() {
 
             {/* HISTORY */}
 
-            <AssignmentHistory
-                assignments={assignmentHistory}
-                selectAssignment={
-                    setSelectedAssignment
-                }
-            />
+            <div className="w-80">
+
+                <AssignmentHistory
+                    assignments={assignmentHistory}
+                    selectAssignment={
+                        setSelectedAssignment
+                    }
+                />
+
+            </div>
 
         </div>
     );
