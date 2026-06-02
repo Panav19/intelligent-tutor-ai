@@ -29,6 +29,12 @@ function AssessmentPage() {
     const [parsedQuiz, setParsedQuiz] =
         useState([]);
 
+    const [answers, setAnswers] =
+        useState({});
+
+    const [score, setScore] =
+        useState(null);
+
     const generateQuiz = async () => {
 
         // VALIDATE TOPIC
@@ -50,6 +56,10 @@ function AssessmentPage() {
 
         setQuiz("");
 
+        setAnswers({});
+
+        setScore(null);
+
         setLoading(true);
 
         try {
@@ -58,11 +68,12 @@ function AssessmentPage() {
                 await API.post(
                     "/generate-quiz",
                     {
-                        topic: topic,
-                        difficulty: difficulty,
-                        num_questions: Number(
-                            numQuestions
-                        )
+                        topic,
+                        difficulty,
+                        num_questions:
+                            Number(
+                                numQuestions
+                            )
                     }
                 );
 
@@ -87,10 +98,17 @@ function AssessmentPage() {
                     generatedQuiz
                 );
 
-                setParsedQuiz(
+                const parsed =
                     parseQuiz(
                         generatedQuiz
-                    )
+                    );
+
+                console.log(
+                    parsed
+                );
+
+                setParsedQuiz(
+                    parsed
                 );
             }
 
@@ -106,6 +124,50 @@ function AssessmentPage() {
         }
 
         setLoading(false);
+    };
+
+    const submitQuiz = () => {
+
+        let correct = 0;
+
+        parsedQuiz.forEach(
+            (
+                question,
+                index
+            ) => {
+
+                if (
+
+                    answers[index] ===
+                    question.correctAnswer
+
+                ) {
+
+                    correct++;
+                }
+
+            }
+        );
+
+        const percentage =
+            Math.round(
+                (
+                    correct /
+                    parsedQuiz.length
+                ) * 100
+            );
+
+        setScore({
+
+            correct,
+
+            total:
+                parsedQuiz.length,
+
+            percentage
+
+        });
+
     };
 
     return (
@@ -240,10 +302,12 @@ function AssessmentPage() {
 
                     </div>
 
-                    {/* BUTTON */}
+                    {/* GENERATE BUTTON */}
 
                     <button
-                        onClick={generateQuiz}
+                        onClick={
+                            generateQuiz
+                        }
                         disabled={loading}
                         className="
                             bg-cyan-500
@@ -265,7 +329,7 @@ function AssessmentPage() {
 
                 </div>
 
-                {/* QUIZ ERROR */}
+                {/* ERROR */}
 
                 {
                     quiz &&
@@ -341,11 +405,7 @@ function AssessmentPage() {
 
                                             </p>
 
-                                            <div
-                                                className="
-                                                    space-y-2
-                                                "
-                                            >
+                                            <div className="space-y-2">
 
                                                 {
 
@@ -365,13 +425,26 @@ function AssessmentPage() {
                                                                     flex
                                                                     items-center
                                                                     gap-2
-                                                                    cursor-not-allowed
                                                                 "
                                                             >
 
                                                                 <input
                                                                     type="radio"
-                                                                    disabled
+                                                                    name={`question-${index}`}
+                                                                    checked={
+                                                                        answers[index] ===
+                                                                        key
+                                                                    }
+                                                                    onChange={() =>
+                                                                        setAnswers(
+                                                                            (
+                                                                                prev
+                                                                            ) => ({
+                                                                                ...prev,
+                                                                                [index]: key
+                                                                            })
+                                                                        )
+                                                                    }
                                                                 />
 
                                                                 <span>
@@ -394,6 +467,84 @@ function AssessmentPage() {
                                         </div>
 
                                     )
+                                )
+
+                            }
+
+                            {/* SUBMIT */}
+
+                            <button
+                                onClick={
+                                    submitQuiz
+                                }
+                                className="
+                                    mt-4
+                                    bg-green-500
+                                    hover:bg-green-600
+                                    px-6
+                                    py-3
+                                    rounded-lg
+                                    font-semibold
+                                "
+                            >
+
+                                Submit Quiz
+
+                            </button>
+
+                            {/* RESULT */}
+
+                            {
+
+                                score && (
+
+                                    <div
+                                        className="
+                                            mt-6
+                                            bg-slate-900
+                                            p-5
+                                            rounded-lg
+                                        "
+                                    >
+
+                                        <h3
+                                            className="
+                                                text-xl
+                                                font-bold
+                                                text-green-400
+                                            "
+                                        >
+
+                                            Quiz Result
+
+                                        </h3>
+
+                                        <p className="mt-2">
+
+                                            Score:
+
+                                            {" "}
+
+                                            {score.correct}
+
+                                            /
+
+                                            {score.total}
+
+                                        </p>
+
+                                        <p>
+
+                                            Percentage:
+
+                                            {" "}
+
+                                            {score.percentage}%
+
+                                        </p>
+
+                                    </div>
+
                                 )
 
                             }
