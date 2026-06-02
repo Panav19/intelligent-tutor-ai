@@ -2,6 +2,10 @@ import React, { useState } from "react";
 
 import API from "../services/api";
 
+import {
+    parseQuiz
+} from "../utils/quizParser";
+
 function AssessmentPage() {
 
     const [topic, setTopic] =
@@ -21,6 +25,9 @@ function AssessmentPage() {
 
     const [error, setError] =
         useState("");
+
+    const [parsedQuiz, setParsedQuiz] =
+        useState([]);
 
     const generateQuiz = async () => {
 
@@ -65,8 +72,17 @@ function AssessmentPage() {
 
             } else {
 
+                const generatedQuiz =
+                    response.data.quiz;
+
                 setQuiz(
-                    response.data.quiz
+                    generatedQuiz
+                );
+
+                setParsedQuiz(
+                    parseQuiz(
+                        generatedQuiz
+                    )
                 );
             }
 
@@ -249,6 +265,90 @@ function AssessmentPage() {
                         : quiz}
 
                 </div>
+
+                {
+                    parsedQuiz.length > 0 && (
+
+                        <div className="mt-8">
+
+                            <h3 className="text-xl font-bold mb-4">
+
+                                Quiz Questions
+
+                            </h3>
+
+                            {
+
+                                parsedQuiz.map(
+                                    (q, index) => (
+
+                                        <div
+                                            key={index}
+                                            className="
+                                                bg-slate-700
+                                                p-4
+                                                rounded-lg
+                                                mb-4
+                                            "
+                                        >
+
+                                            <p className="font-semibold">
+
+                                                {index + 1}.
+                                                {" "}
+                                                {q.question}
+
+                                            </p>
+
+                                            <div className="mt-3 space-y-2">
+
+                                                {
+
+                                                    Object.entries(
+                                                        q.options
+                                                    ).map(
+                                                        (
+                                                            [key, value]
+                                                        ) => (
+
+                                                            <label
+                                                                key={key}
+                                                                className="
+                                                                    block
+                                                                "
+                                                            >
+
+                                                                <input
+                                                                    type="radio"
+                                                                    disabled
+                                                                />
+
+                                                                {" "}
+
+                                                                {key}.
+                                                                {" "}
+                                                                {value}
+
+                                                            </label>
+
+                                                        )
+                                                    )
+
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+                                    )
+                                )
+
+                            }
+
+                        </div>
+
+                    )
+                }
 
             </div>
 
