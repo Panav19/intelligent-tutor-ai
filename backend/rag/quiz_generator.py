@@ -19,7 +19,7 @@ def generate_quiz(
 
     results = vector_store.similarity_search_with_score(
         topic,
-        k=8
+        k=5
     )
 
     relevant_docs = []
@@ -54,6 +54,11 @@ Generate EXACTLY {num_questions} multiple-choice questions.
 IMPORTANT:
 - Use ONLY the provided context.
 - Generate EXACTLY {num_questions} questions.
+- Every question must test a DIFFERENT concept.
+- Do NOT repeat the same concept using different wording.
+- Cover as many subtopics from the context as possible.
+- Questions must be unique and non-redundant.
+- Match the requested difficulty level: {difficulty}.
 - Every question must contain:
   - Question
   - Four options (A, B, C, D)
@@ -61,8 +66,6 @@ IMPORTANT:
 - Do NOT generate explanations.
 - Do NOT generate introductory text.
 - Do NOT generate concluding text.
-
-Difficulty: {difficulty}
 
 Topic:
 {topic}
@@ -83,7 +86,14 @@ D. <option>
 Correct Answer: A
 
 Question 2:
-...
+<question>
+
+A. <option>
+B. <option>
+C. <option>
+D. <option>
+
+Correct Answer: B
 """
 
     quiz = llm.invoke(prompt)
