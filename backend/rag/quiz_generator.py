@@ -26,7 +26,9 @@ def generate_quiz(
 
     for doc, score in results:
 
-        print(f"Similarity Score: {score}")
+        print(
+            f"Similarity Score: {score}"
+        )
 
         # LOWER SCORE = BETTER MATCH
 
@@ -39,33 +41,79 @@ def generate_quiz(
     if len(relevant_docs) == 0:
 
         return {
-            "error": "Topic not found in uploaded PDFs"
+            "error":
+            "Topic not found in uploaded PDFs"
         }
 
     context = "\n\n".join(
-        [doc.page_content for doc in relevant_docs]
+        [
+            doc.page_content
+            for doc in relevant_docs
+        ]
     )
+
+    # DIFFICULTY RULES
+
+    if difficulty == "Easy":
+
+        difficulty_instruction = """
+        - Focus on definitions, terminology,
+          and basic concepts.
+        - Ask direct factual questions.
+        - Avoid analytical or scenario-based questions.
+        """
+
+    elif difficulty == "Medium":
+
+        difficulty_instruction = """
+        - Focus on conceptual understanding.
+        - Include application-based questions.
+        - Test relationships between concepts.
+        """
+
+    else:  # Hard
+
+        difficulty_instruction = """
+        - Focus on analytical reasoning.
+        - Include scenario-based questions.
+        - Include comparisons between concepts.
+        - Include problem-solving questions.
+        - Require deeper conceptual reasoning.
+        - Avoid simple definition-based questions.
+        """
 
     prompt = f"""
 You are an expert college examiner.
 
-Generate EXACTLY {num_questions} multiple-choice questions.
+Generate EXACTLY {num_questions}
+multiple-choice questions.
 
 IMPORTANT:
+
 - Use ONLY the provided context.
 - Generate EXACTLY {num_questions} questions.
 - Every question must test a DIFFERENT concept.
 - Do NOT repeat the same concept using different wording.
 - Cover as many subtopics from the context as possible.
 - Questions must be unique and non-redundant.
-- Match the requested difficulty level: {difficulty}.
-- Every question must contain:
-  - Question
-  - Four options (A, B, C, D)
-  - Correct Answer
-- Do NOT generate explanations.
-- Do NOT generate introductory text.
-- Do NOT generate concluding text.
+- Avoid duplicate questions.
+- Avoid duplicate correct answers whenever possible.
+
+Difficulty Level:
+{difficulty}
+
+Difficulty Rules:
+{difficulty_instruction}
+
+Every question must contain:
+
+- Question
+- Four options (A, B, C, D)
+- Correct Answer
+
+Do NOT generate explanations.
+Do NOT generate introductory text.
+Do NOT generate concluding text.
 
 Topic:
 {topic}
