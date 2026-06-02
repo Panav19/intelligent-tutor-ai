@@ -44,6 +44,12 @@ function AssessmentPage() {
 
         setError("");
 
+        // CLEAR PREVIOUS QUIZ
+
+        setParsedQuiz([]);
+
+        setQuiz("");
+
         setLoading(true);
 
         try {
@@ -70,6 +76,8 @@ function AssessmentPage() {
                     response.data.quiz.error
                 );
 
+                setParsedQuiz([]);
+
             } else {
 
                 const generatedQuiz =
@@ -93,6 +101,8 @@ function AssessmentPage() {
             setQuiz(
                 "Error generating quiz"
             );
+
+            setParsedQuiz([]);
         }
 
         setLoading(false);
@@ -182,11 +192,17 @@ function AssessmentPage() {
                             "
                         >
 
-                            <option>Easy</option>
+                            <option>
+                                Easy
+                            </option>
 
-                            <option>Medium</option>
+                            <option>
+                                Medium
+                            </option>
 
-                            <option>Hard</option>
+                            <option>
+                                Hard
+                            </option>
 
                         </select>
 
@@ -204,6 +220,8 @@ function AssessmentPage() {
 
                         <input
                             type="number"
+                            min="1"
+                            max="20"
                             value={numQuestions}
                             onChange={(e) =>
                                 setNumQuestions(
@@ -247,31 +265,46 @@ function AssessmentPage() {
 
                 </div>
 
-                {/* QUIZ OUTPUT */}
+                {/* QUIZ ERROR */}
 
-                <div
-                    className="
-                        mt-8
-                        bg-slate-900
-                        p-6
-                        rounded-lg
-                        min-h-[300px]
-                        whitespace-pre-wrap
-                    "
-                >
+                {
+                    quiz &&
+                    parsedQuiz.length === 0 &&
+                    !loading && (
 
-                    {loading
-                        ? "Generating quiz..."
-                        : quiz}
+                        <div
+                            className="
+                                mt-8
+                                bg-red-500/10
+                                border
+                                border-red-500
+                                text-red-300
+                                p-4
+                                rounded-lg
+                            "
+                        >
 
-                </div>
+                            {quiz}
+
+                        </div>
+
+                    )
+                }
+
+                {/* PARSED QUIZ */}
 
                 {
                     parsedQuiz.length > 0 && (
 
                         <div className="mt-8">
 
-                            <h3 className="text-xl font-bold mb-4">
+                            <h3
+                                className="
+                                    text-xl
+                                    font-bold
+                                    mb-4
+                                "
+                            >
 
                                 Quiz Questions
 
@@ -280,19 +313,27 @@ function AssessmentPage() {
                             {
 
                                 parsedQuiz.map(
-                                    (q, index) => (
+                                    (
+                                        q,
+                                        index
+                                    ) => (
 
                                         <div
                                             key={index}
                                             className="
                                                 bg-slate-700
-                                                p-4
+                                                p-5
                                                 rounded-lg
                                                 mb-4
                                             "
                                         >
 
-                                            <p className="font-semibold">
+                                            <p
+                                                className="
+                                                    font-semibold
+                                                    mb-3
+                                                "
+                                            >
 
                                                 {index + 1}.
                                                 {" "}
@@ -300,7 +341,11 @@ function AssessmentPage() {
 
                                             </p>
 
-                                            <div className="mt-3 space-y-2">
+                                            <div
+                                                className="
+                                                    space-y-2
+                                                "
+                                            >
 
                                                 {
 
@@ -308,13 +353,19 @@ function AssessmentPage() {
                                                         q.options
                                                     ).map(
                                                         (
-                                                            [key, value]
+                                                            [
+                                                                key,
+                                                                value
+                                                            ]
                                                         ) => (
 
                                                             <label
                                                                 key={key}
                                                                 className="
-                                                                    block
+                                                                    flex
+                                                                    items-center
+                                                                    gap-2
+                                                                    cursor-not-allowed
                                                                 "
                                                             >
 
@@ -323,11 +374,13 @@ function AssessmentPage() {
                                                                     disabled
                                                                 />
 
-                                                                {" "}
+                                                                <span>
 
-                                                                {key}.
-                                                                {" "}
-                                                                {value}
+                                                                    {key}.
+                                                                    {" "}
+                                                                    {value}
+
+                                                                </span>
 
                                                             </label>
 

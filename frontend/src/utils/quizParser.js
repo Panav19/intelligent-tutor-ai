@@ -2,8 +2,12 @@ export function parseQuiz(quizText) {
 
     const questions = [];
 
+    const cleanedQuiz = quizText
+        .replace(/\*\*/g, "")
+        .replace(/\r/g, "");
+
     const blocks =
-        quizText.split(/Question\s+\d+:/);
+        cleanedQuiz.split(/Question\s+\d+:/);
 
     blocks.shift();
 
