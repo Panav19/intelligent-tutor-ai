@@ -49,20 +49,20 @@ def generate_quiz(
     prompt = f"""
 You are an expert college examiner.
 
-Generate EXACTLY {num_questions} multiple-choice questions (MCQs) ONLY from the provided context.
+Generate EXACTLY {num_questions} multiple-choice questions.
 
-STRICT RULES:
-- Generate EXACTLY {num_questions} questions
-- Do NOT generate fewer questions
-- Do NOT generate more questions
-- Every question MUST contain:
-    - Question statement
-    - 4 options (A, B, C, D)
-    - Correct answer
-- Do NOT include explanations
-- Do NOT include introductions
-- Do NOT include conclusions
-- Output ONLY the quiz
+IMPORTANT:
+- Use ONLY the provided context.
+- Generate EXACTLY {num_questions} questions.
+- Every question must contain:
+  - Question
+  - Four options (A, B, C, D)
+  - Correct Answer
+- Do NOT generate explanations.
+- Do NOT generate introductory text.
+- Do NOT generate concluding text.
+
+Difficulty: {difficulty}
 
 Topic:
 {topic}
@@ -70,25 +70,20 @@ Topic:
 Context:
 {context}
 
-Required Format:
+Output Format:
 
-1. Question text
+Question 1:
+<question>
 
-A. Option
-B. Option
-C. Option
-D. Option
+A. <option>
+B. <option>
+C. <option>
+D. <option>
 
 Correct Answer: A
 
-2. Question text
-
-A. Option
-B. Option
-C. Option
-D. Option
-
-Correct Answer: B
+Question 2:
+...
 """
 
     quiz = llm.invoke(prompt)
