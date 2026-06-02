@@ -25,6 +25,11 @@ function Sidebar({
         {
             id: "assignments",
             label: "Assignments"
+        },
+
+        {
+            id: "assessments",
+            label: "Assessments"
         }
 
     ];
