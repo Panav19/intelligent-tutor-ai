@@ -7,6 +7,7 @@ import PDFUpload from "./components/PDFUpload";
 import ChatBox from "./components/ChatBox";
 import Sidebar from "./components/Sidebar";
 import AssignmentGenerator from "./components/AssignmentGenerator";
+import AssessmentPage from "./components/AssessmentPage";
 
 import API from "./services/api";
 
@@ -182,6 +183,12 @@ function App() {
                             sessionId={currentSession}
                         />
 
+                    )}
+
+                    {/* ASSESSMENT VIEW */}
+
+                    {activeView === "assessments" && (
+                        <AssessmentPage />
                     )}
 
                 </div>
