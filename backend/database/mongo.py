@@ -13,3 +13,5 @@ session_collection = db["sessions"]
 assignment_collection = db["assignments"]
 
 quiz_collection = db["quizzes"]
+
+assessment_collection = db["assessments"]

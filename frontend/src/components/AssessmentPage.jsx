@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import AssessmentHistory from "./AssessmentHistory";
 
 import API from "../services/api";
 
@@ -37,6 +39,52 @@ function AssessmentPage() {
 
     const [submitted, setSubmitted] =
         useState(false);
+
+    const [assessmentHistory, setAssessmentHistory] =
+        useState([]);
+
+    const [selectedAssessment, setSelectedAssessment] =
+        useState(null);
+
+    useEffect(() => {
+
+        loadHistory();
+
+    }, []);
+
+    const loadHistory = async () => {
+
+        try {
+
+            const response =
+
+                await API.get(
+
+                    "/assessments"
+
+                );
+
+            setAssessmentHistory(
+
+                response.data
+
+                    .assessments
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+
+                error
+
+            );
+
+        }
+
+    };
 
     const generateQuiz = async () => {
 
@@ -131,7 +179,7 @@ function AssessmentPage() {
         setLoading(false);
     };
 
-    const submitQuiz = () => {
+    const submitQuiz = async () => {
 
         let correct = 0;
 
@@ -175,11 +223,43 @@ function AssessmentPage() {
 
         setSubmitted(true);
 
+        try {
+
+            await API.post(
+
+                "/save-assessment",
+
+                {
+
+                    topic,
+
+                    difficulty,
+
+                    score: correct,
+
+                    total:
+
+                    parsedQuiz.length
+
+                }
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+        loadHistory();
+
     };
 
     return (
 
-        <div className="flex gap-6">
+        <div className="flex gap-6 items-stretch">
 
             {/* GENERATOR */}
 
@@ -565,6 +645,69 @@ function AssessmentPage() {
 
                             {
 
+                                selectedAssessment ? (
+
+                                    <div
+                                        className="
+                                            mt-6
+                                            bg-slate-900
+                                            p-5
+                                            rounded-lg
+                                        "
+                                    >
+
+                                        <h3
+                                            className="
+                                                text-xl
+                                                font-bold
+                                                text-green-400
+                                            "
+                                        >
+
+                                            Previous Result
+
+                                        </h3>
+
+                                        <p className="mt-2">
+
+                                            Score:
+
+                                            {" "}
+
+                                            {
+
+                                                selectedAssessment.score
+
+                                            }
+
+                                            /
+
+                                            {
+
+                                                selectedAssessment.total
+
+                                            }
+
+                                        </p>
+
+                                        <p>
+
+                                            Percentage:
+
+                                            {" "}
+
+                                            {
+
+                                                selectedAssessment.percentage
+
+                                            }%
+
+                                        </p>
+
+                                    </div>
+
+                                ) :
+
                                 score && (
 
                                     <div
@@ -622,6 +765,29 @@ function AssessmentPage() {
 
                     )
                 }
+
+            </div>
+
+            {/* HISTORY */}
+
+            <div
+                className="
+                    w-80
+                    flex
+                "
+            >
+
+                <AssessmentHistory
+
+                    assessments={
+                        assessmentHistory
+                    }
+
+                    selectAssessment={
+                        setSelectedAssessment
+                    }
+
+                />
 
             </div>
 
