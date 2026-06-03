@@ -35,6 +35,9 @@ function AssessmentPage() {
     const [score, setScore] =
         useState(null);
 
+    const [submitted, setSubmitted] =
+        useState(false);
+
     const generateQuiz = async () => {
 
         // VALIDATE TOPIC
@@ -59,6 +62,8 @@ function AssessmentPage() {
         setAnswers({});
 
         setScore(null);
+
+        setSubmitted(false);
 
         setLoading(true);
 
@@ -167,6 +172,8 @@ function AssessmentPage() {
             percentage
 
         });
+
+        setSubmitted(true);
 
     };
 
@@ -421,11 +428,33 @@ function AssessmentPage() {
 
                                                             <label
                                                                 key={key}
-                                                                className="
+                                                                className={`
+
                                                                     flex
                                                                     items-center
                                                                     gap-2
-                                                                "
+                                                                    p-2
+                                                                    rounded
+
+                                                                    ${
+
+                                                                        submitted &&
+
+                                                                        key === q.correctAnswer
+
+                                                                            ? "bg-green-700"
+
+                                                                            : submitted &&
+
+                                                                            answers[index] === key
+
+                                                                            ? "bg-red-700"
+
+                                                                            : ""
+
+                                                                    }
+
+                                                                `}
                                                             >
 
                                                                 <input
@@ -435,6 +464,7 @@ function AssessmentPage() {
                                                                         answers[index] ===
                                                                         key
                                                                     }
+                                                                    disabled={submitted}
                                                                     onChange={() =>
                                                                         setAnswers(
                                                                             (
@@ -464,6 +494,41 @@ function AssessmentPage() {
 
                                             </div>
 
+                                            {
+                                                submitted && (
+
+                                                    <div className="mt-4">
+
+                                                        <p className="text-red-300">
+
+                                                            Your Answer:
+
+                                                            {" "}
+
+                                                            {
+
+                                                                answers[index] ||
+                                                                "Not Answered"
+
+                                                            }
+
+                                                        </p>
+
+                                                        <p className="text-green-300">
+
+                                                            Correct Answer:
+
+                                                            {" "}
+
+                                                            {q.correctAnswer}
+
+                                                        </p>
+
+                                                    </div>
+
+                                                )
+                                            }
+
                                         </div>
 
                                     )
@@ -473,24 +538,28 @@ function AssessmentPage() {
 
                             {/* SUBMIT */}
 
-                            <button
-                                onClick={
-                                    submitQuiz
-                                }
-                                className="
-                                    mt-4
-                                    bg-green-500
-                                    hover:bg-green-600
-                                    px-6
-                                    py-3
-                                    rounded-lg
-                                    font-semibold
-                                "
-                            >
+                            {
+                                !submitted && (
 
-                                Submit Quiz
+                                    <button
+                                        onClick={submitQuiz}
+                                        className="
+                                            mt-4
+                                            bg-green-500
+                                            hover:bg-green-600
+                                            px-6
+                                            py-3
+                                            rounded-lg
+                                            font-semibold
+                                        "
+                                    >
 
-                            </button>
+                                        Submit Quiz
+
+                                    </button>
+
+                                )
+                            }
 
                             {/* RESULT */}
 
