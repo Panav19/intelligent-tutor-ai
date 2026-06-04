@@ -1,3 +1,6 @@
+import HistoryCard from "./HistoryCard";
+import HistoryPanel from "./HistoryPanel";
+
 function AssessmentHistory({
     assessments,
     selectAssessment
@@ -5,102 +8,95 @@ function AssessmentHistory({
 
     return (
 
-        <div className="bg-slate-800 p-4 rounded-xl shadow-lg h-full flex flex-col">
+        <HistoryPanel
 
-            <h2 className="text-xl font-bold mb-4 text-cyan-400">
+            title="Assessment History"
 
-                Assessment History
+        >
 
-            </h2>
+            {
 
-            <div className="space-y-3 overflow-y-auto flex-1">
+                assessments.map(
 
-                {
+                    (
+                        assessment,
+                        index
+                    ) => (
 
-                    assessments.map(
+                        <HistoryCard
 
-                        (
-                            assessment,
-                            index
-                        ) => (
+                            key={index}
 
-                            <div
-                                key={index}
-                                onClick={() =>
-                                    selectAssessment(
-                                        assessment
-                                    )
+                            onClick={() =>
+
+                                selectAssessment(
+
+                                    assessment
+
+                                )
+
+                            }
+
+                        >
+
+                            <p className="font-semibold">
+
+                                {
+
+                                    assessment.topic
+
                                 }
-                                className="
-                                    bg-slate-700
-                                    hover:bg-slate-600
-                                    p-3
-                                    rounded-lg
-                                    cursor-pointer
-                                    transition
-                                "
-                            >
 
-                                <p className="font-semibold">
+                            </p>
 
-                                    {
+                            <p className="text-sm text-gray-300">
 
-                                        assessment.topic
+                                {
 
-                                    }
+                                    assessment.difficulty
 
-                                </p>
+                                }
 
-                                <p className="text-sm text-gray-300">
+                            </p>
 
-                                    {
+                            <p className="text-sm text-green-300">
 
-                                        assessment.difficulty
+                                {
 
-                                    }
+                                    assessment.score
 
-                                </p>
+                                }
 
-                                <p className="text-sm text-green-300">
+                                /
 
-                                    {
+                                {
 
-                                        assessment.score
+                                    assessment.total
 
-                                    }
+                                }
 
-                                    /
+                                {" "}
+                                (
 
-                                    {
+                                {
 
-                                        assessment.total
+                                    assessment.percentage
 
-                                    }
+                                }
 
-                                    {" "}
-                                    (
+                                %)
 
-                                    {
+                            </p>
 
-                                        assessment.percentage
-
-                                    }
-
-                                    %)
-
-                                </p>
-
-                            </div>
-
-                        )
+                        </HistoryCard>
 
                     )
 
-                }
+                )
 
-            </div>
+            }
 
-        </div>
+        </HistoryPanel>
 
     );
 
