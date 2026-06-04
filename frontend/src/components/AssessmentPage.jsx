@@ -114,6 +114,8 @@ function AssessmentPage() {
 
         setSubmitted(false);
 
+        setSelectedAssessment(null);
+
         setLoading(true);
 
         try {
@@ -270,9 +272,13 @@ function AssessmentPage() {
                         assessmentHistory
                     }
 
-                    selectAssessment={
-                        setSelectedAssessment
-                    }
+                    selectAssessment={(assessment) => {
+
+                        setSelectedAssessment(
+                            assessment
+                        );
+
+                    }}
 
                 />
 
@@ -660,125 +666,137 @@ function AssessmentPage() {
                                 )
                             }
 
-                            {/* RESULT */}
+                        </div>
 
-                            {
+                    )
+                }
 
-                                selectedAssessment ? (
+                {/* RESULT */}
 
-                                    <div
-                                        className="
-                                            mt-6
-                                            bg-slate-900
-                                            p-5
-                                            rounded-lg
-                                        "
-                                    >
+                {
+                    score && (
 
-                                        <h3
-                                            className="
-                                                text-xl
-                                                font-bold
-                                                text-green-400
-                                            "
-                                        >
+                        <div
+                            className="
+                                mt-8
+                                bg-slate-900
+                                p-5
+                                rounded-lg
+                            "
+                        >
 
-                                            Previous Result
+                            <h3
+                                className="
+                                    text-xl
+                                    font-bold
+                                    text-green-400
+                                    mb-3
+                                "
+                            >
 
-                                        </h3>
+                                Quiz Result
 
-                                        <p className="mt-2">
+                            </h3>
 
-                                            Score:
+                            <p>
 
-                                            {" "}
+                                Score:
 
-                                            {
+                                {" "}
 
-                                                selectedAssessment.score
+                                {score.correct}
 
-                                            }
+                                /
 
-                                            /
+                                {score.total}
 
-                                            {
+                            </p>
 
-                                                selectedAssessment.total
+                            <p>
 
-                                            }
+                                Percentage:
 
-                                        </p>
+                                {" "}
 
-                                        <p>
+                                {score.percentage}%
 
-                                            Percentage:
+                            </p>
 
-                                            {" "}
+                        </div>
 
-                                            {
+                    )
+                }
 
-                                                selectedAssessment.percentage
+                {/* SELECTED ASSESSMENT */}
 
-                                            }%
+                {
+                    selectedAssessment && (
 
-                                        </p>
+                        <div
+                            className="
+                                mt-8
+                                bg-slate-900
+                                p-5
+                                rounded-lg
+                            "
+                        >
 
-                                    </div>
+                            <h3
+                                className="
+                                    text-xl
+                                    font-bold
+                                    text-cyan-400
+                                    mb-3
+                                "
+                            >
 
-                                ) :
+                                Selected Assessment
 
-                                score && (
+                            </h3>
 
-                                    <div
-                                        className="
-                                            mt-6
-                                            bg-slate-900
-                                            p-5
-                                            rounded-lg
-                                        "
-                                    >
+                            <p>
 
-                                        <h3
-                                            className="
-                                                text-xl
-                                                font-bold
-                                                text-green-400
-                                            "
-                                        >
+                                Topic:
 
-                                            Quiz Result
+                                {" "}
 
-                                        </h3>
+                                {selectedAssessment.topic}
 
-                                        <p className="mt-2">
+                            </p>
 
-                                            Score:
+                            <p>
 
-                                            {" "}
+                                Difficulty:
 
-                                            {score.correct}
+                                {" "}
 
-                                            /
+                                {selectedAssessment.difficulty}
 
-                                            {score.total}
+                            </p>
 
-                                        </p>
+                            <p>
 
-                                        <p>
+                                Score:
 
-                                            Percentage:
+                                {" "}
 
-                                            {" "}
+                                {selectedAssessment.score}
 
-                                            {score.percentage}%
+                                /
 
-                                        </p>
+                                {selectedAssessment.total}
 
-                                    </div>
+                            </p>
 
-                                )
+                            <p>
 
-                            }
+                                Percentage:
+
+                                {" "}
+
+                                {selectedAssessment.percentage}%
+
+                            </p>
 
                         </div>
 
