@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import GeneratorLayout from "./GeneratorLayout";
 import AssignmentHistory from "./AssignmentHistory";
 
 import API from "../services/api";
@@ -117,7 +118,25 @@ function AssignmentGenerator() {
 
     return (
 
-        <div className="flex gap-6 items-start">
+        <GeneratorLayout
+
+            history={
+
+                <AssignmentHistory
+
+                    assignments={
+                        assignmentHistory
+                    }
+
+                    selectAssignment={
+                        setSelectedAssignment
+                    }
+
+                />
+
+            }
+
+        >
 
             {/* GENERATOR */}
 
@@ -251,23 +270,7 @@ function AssignmentGenerator() {
 
             </div>
 
-            {/* HISTORY */}
-
-            <div className="
-                w-80
-                shrink-0
-            ">
-
-                <AssignmentHistory
-                    assignments={assignmentHistory}
-                    selectAssignment={
-                        setSelectedAssignment
-                    }
-                />
-
-            </div>
-
-        </div>
+        </GeneratorLayout>
     );
 }
 

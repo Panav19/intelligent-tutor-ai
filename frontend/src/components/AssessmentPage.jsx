@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import GeneratorLayout from "./GeneratorLayout";
 import AssessmentHistory from "./AssessmentHistory";
 
 import API from "../services/api";
@@ -259,7 +260,25 @@ function AssessmentPage() {
 
     return (
 
-        <div className="flex gap-6 items-stretch">
+        <GeneratorLayout
+
+            history={
+
+                <AssessmentHistory
+
+                    assessments={
+                        assessmentHistory
+                    }
+
+                    selectAssessment={
+                        setSelectedAssessment
+                    }
+
+                />
+
+            }
+
+        >
 
             {/* GENERATOR */}
 
@@ -768,30 +787,7 @@ function AssessmentPage() {
 
             </div>
 
-            {/* HISTORY */}
-
-            <div
-                className="
-                    w-80
-                    shrink-0
-                "
-            >
-
-                <AssessmentHistory
-
-                    assessments={
-                        assessmentHistory
-                    }
-
-                    selectAssessment={
-                        setSelectedAssessment
-                    }
-
-                />
-
-            </div>
-
-        </div>
+        </GeneratorLayout>
 
     );
 }
