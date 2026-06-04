@@ -117,7 +117,7 @@ function AssignmentGenerator() {
 
     return (
 
-        <div className="flex gap-6 items-stretch">
+        <div className="flex gap-6 items-start">
 
             {/* GENERATOR */}
 
@@ -205,6 +205,8 @@ function AssignmentGenerator() {
                                     e.target.value
                                 )
                             }
+                            min="1"
+                            max="20"
                             className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600"
                         />
 
@@ -237,7 +239,7 @@ function AssignmentGenerator() {
 
                 {/* OUTPUT */}
 
-                <div className="mt-8 bg-slate-900 p-6 rounded-lg min-h-[300px] whitespace-pre-wrap">
+                <div className="mt-8 bg-slate-900 p-6 rounded-lg min-h-[300px] whitespace-pre-wrap flex-grow">
 
                     {loading
                         ? "Generating assignment..."
@@ -253,7 +255,7 @@ function AssignmentGenerator() {
 
             <div className="
                 w-80
-                flex
+                shrink-0
             ">
 
                 <AssignmentHistory

@@ -773,7 +773,7 @@ function AssessmentPage() {
             <div
                 className="
                     w-80
-                    flex
+                    shrink-0
                 "
             >
 
