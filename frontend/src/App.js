@@ -67,7 +67,7 @@ function App() {
             const response = await API.get("/sessions");
 
             const loadedSessions =
-                response.data.sessions;
+                response.data.data;
 
             setSessions(loadedSessions);
 
