@@ -17,13 +17,41 @@ class QuizRequest(BaseModel):
 async def create_quiz(
     request: QuizRequest
 ):
+    
+    try:
 
-    quiz = generate_quiz(
-        request.topic,
-        request.difficulty,
-        request.num_questions
-    )
+        quiz = generate_quiz(
+            request.topic,
+            request.difficulty,
+            request.num_questions
+        )
 
-    return {
-        "quiz": quiz
-    }
+        return {
+
+            "success": True,
+
+            "data": quiz
+
+        }
+    
+    except ValueError as e:
+
+        return {
+
+            "success": False,
+
+            "message": str(e)
+
+        }
+    
+    except Exception:
+
+        return {
+
+            "success": False,
+
+            "message":
+
+            "Failed to generate quiz"
+
+        }

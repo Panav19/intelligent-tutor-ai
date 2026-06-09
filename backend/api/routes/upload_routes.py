@@ -33,5 +33,11 @@ async def upload_pdf(file: UploadFile = File(...)):
     create_vector_store(chunks)
 
     return {
-        "message": "PDF uploaded and processed successfully"
+
+        "success": True,
+
+        "data":
+
+        "PDF uploaded and processed successfully"
+
     }

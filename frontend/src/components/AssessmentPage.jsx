@@ -65,13 +65,19 @@ function AssessmentPage() {
 
                 );
 
-            setAssessmentHistory(
+            if (
 
-                response.data
+                response.data.success
 
-                    .assessments
+            ) {
 
-            );
+                setAssessmentHistory(
+
+                    response.data.data
+
+                );
+
+            }
 
         }
 
@@ -136,36 +142,39 @@ function AssessmentPage() {
             // HANDLE BACKEND ERROR
 
             if (
-                response.data.quiz?.error
+
+                response.data.success
+
             ) {
 
-                setQuiz(
-                    response.data.quiz.error
-                );
-
-                setParsedQuiz([]);
-
-            } else {
-
                 const generatedQuiz =
-                    response.data.quiz;
+
+                    response.data.data;
 
                 setQuiz(
                     generatedQuiz
                 );
 
                 const parsed =
+
                     parseQuiz(
                         generatedQuiz
                     );
 
-                console.log(
-                    parsed
-                );
-
                 setParsedQuiz(
                     parsed
                 );
+
+            }
+
+            else {
+
+                setQuiz(
+                    response.data.message
+                );
+
+                setParsedQuiz([]);
+
             }
 
         } catch (error) {

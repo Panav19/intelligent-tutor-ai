@@ -36,7 +36,7 @@ function ChatBox({ sessionId }) {
             );
 
             setMessages(
-                response.data.messages.map((msg) => ({
+                response.data.data.map((msg) => ({
                     type:
                         msg.role === "user"
                             ? "user"
@@ -98,7 +98,7 @@ function ChatBox({ sessionId }) {
 
             const aiMessage = {
                 type: "ai",
-                text: response.data.answer
+                text: response.data.data.answer
             };
 
             setMessages((prev) => [

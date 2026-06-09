@@ -39,7 +39,13 @@ async def ask(request: QuestionRequest):
         request.session_id
     )
 
-    return response
+    return {
+
+        "success": True,
+
+        "data": response
+
+    }
 
 @router.get("/chat-history/{session_id}")
 async def chat_history(session_id: str):
@@ -47,12 +53,22 @@ async def chat_history(session_id: str):
     history = get_chat_history(session_id)
 
     return {
-        "messages": history
+
+        "success": True,
+
+        "data": history
+
     }
 
 @router.get("/sessions")
 async def sessions():
 
     return {
-        "sessions": get_all_sessions()
+
+        "success": True,
+
+        "data":
+
+        get_all_sessions()
+
     }
