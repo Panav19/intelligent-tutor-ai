@@ -39,11 +39,10 @@ def generate_assignment(
     # NO RELEVANT CONTENT
 
     if len(relevant_docs) == 0:
-
-        return {
-            "error":
+    
+        raise ValueError(
             "Topic not found in uploaded PDFs"
-        }
+        )
 
     context = "\n\n".join(
         [

@@ -55,7 +55,7 @@ function PDFUpload() {
             );
 
             setMessage(
-                response.data.message
+                response.data.data
             );
 
         } catch (error) {

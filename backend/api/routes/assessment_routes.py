@@ -53,9 +53,9 @@ async def create_assessment(
 
     return {
 
-        "message":
+        "success": True,
 
-        "Assessment saved"
+        "data": "Assessment saved"
 
     }
 
@@ -67,7 +67,9 @@ async def assessments():
 
     return {
 
-        "assessments":
+        "success": True,
+
+        "data":
 
         get_all_assessments()
 

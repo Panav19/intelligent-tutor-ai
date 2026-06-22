@@ -45,9 +45,19 @@ function AssignmentGenerator() {
                 "/assignments"
             );
 
-            setAssignmentHistory(
-                response.data.assignments
-            );
+            if (
+
+                response.data.success
+
+            ) {
+
+                setAssignmentHistory(
+
+                    response.data.data
+
+                );
+
+            }
 
         } catch (error) {
 
@@ -88,20 +98,29 @@ function AssignmentGenerator() {
             // HANDLE BACKEND ERROR RESPONSE
 
             if (
-                response.data.assignment.error
+
+                response.data.success
+
             ) {
 
                 setAssignment(
-                    response.data.assignment.error
-                );
 
-            } else {
+                    response.data.data
 
-                setAssignment(
-                    response.data.assignment
                 );
 
                 loadAssignments();
+
+            }
+
+            else {
+
+                setAssignment(
+
+                    response.data.message
+
+                );
+
             }
 
         } catch (error) {
