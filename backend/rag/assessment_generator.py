@@ -2,6 +2,8 @@ from database.mongo import assessment_collection
 
 from datetime import datetime
 
+from utils.logger import logger
+
 
 def save_assessment(
     topic,
@@ -32,6 +34,11 @@ def save_assessment(
 
     assessment_collection.insert_one(
         assessment_doc
+    )
+
+    logger.info(
+        f"Assessment saved for topic '{topic}' "
+        f"with score {score}/{total}"
     )
 
 

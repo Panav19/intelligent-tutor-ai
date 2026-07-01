@@ -5,6 +5,7 @@ import os
 from rag.pdf_loader import load_pdf
 from rag.chunking import split_documents
 from rag.vector_store import create_vector_store
+from utils.logger import logger
 
 router = APIRouter()
 
@@ -17,27 +18,46 @@ async def upload_pdf(file: UploadFile = File(...)):
             detail="Only PDF files are allowed"
         )
 
-    # CREATE UPLOADS FOLDER IF MISSING
+    try:
+        # CREATE UPLOADS FOLDER IF MISSING
 
-    os.makedirs("uploads", exist_ok=True)
+        os.makedirs("uploads", exist_ok=True)
 
-    file_path = f"uploads/{file.filename}"
+        file_path = f"uploads/{file.filename}"
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    documents = load_pdf(file_path)
+        logger.info(
+            f"Uploaded PDF: {file.filename}"
+        )
 
-    chunks = split_documents(documents)
+        documents = load_pdf(file_path)
 
-    create_vector_store(chunks)
+        chunks = split_documents(documents)
 
-    return {
+        logger.info(
+            f"Created {len(chunks)} chunks"
+        )
 
-        "success": True,
+        create_vector_store(chunks)
 
-        "data":
+        logger.info(
+            "Vector store updated successfully"
+        )
 
-        "PDF uploaded and processed successfully"
+        return {
+            "success": True,
+            "data": "PDF uploaded and processed successfully"
+        }
 
-    }
+    except Exception as e:
+
+        logger.exception(
+            f"Failed to process PDF '{file.filename}'"
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to process PDF"
+        )

@@ -7,6 +7,8 @@ from database.mongo import quiz_collection
 
 from datetime import datetime
 
+from utils.logger import logger
+
 vector_store = get_vector_store()
 
 llm = get_llm()
@@ -26,8 +28,8 @@ def generate_quiz(
 
     for doc, score in results:
 
-        print(
-            f"Similarity Score: {score}"
+        logger.info(
+            f"Quiz retrieval similarity score: {score:.4f}"
         )
 
         # LOWER SCORE = BETTER MATCH
@@ -39,6 +41,10 @@ def generate_quiz(
     # NO RELEVANT CONTENT FOUND
 
     if len(relevant_docs) == 0:
+
+        logger.error(
+            f"No relevant documents found for topic '{topic}'"
+        )
     
         raise ValueError(
             "Topic not found in uploaded PDFs"
@@ -160,6 +166,10 @@ Correct Answer: B
 
     quiz_collection.insert_one(
         quiz_doc
+    )
+
+    logger.info(
+        f"Quiz generated successfully for topic '{topic}'"
     )
 
     return quiz
