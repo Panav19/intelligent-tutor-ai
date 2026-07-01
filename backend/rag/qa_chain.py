@@ -1,5 +1,6 @@
 from rag.retriever import get_retriever
 from rag.llm import get_llm
+from utils.logger import logger
 
 from rag.memory import (
     save_message,
@@ -11,6 +12,10 @@ retriever = get_retriever()
 llm = get_llm()
 
 def ask_question(question, session_id):
+
+    logger.info(
+        f"Question received: {question}"
+    )
 
     # LOAD CHAT HISTORY
 
@@ -72,6 +77,10 @@ def ask_question(question, session_id):
         enhanced_question
     )
 
+    logger.info(
+        f"Retrieved {len(docs)} chunks"
+    )
+
     context = "\n\n".join(
         [doc.page_content for doc in docs]
     )
@@ -105,6 +114,10 @@ Answer:
 """
 
     response = llm.invoke(prompt)
+
+    logger.info(
+        "Answer generated successfully"
+    )
 
     # SAVE USER MESSAGE
 

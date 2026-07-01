@@ -7,6 +7,8 @@ from database.mongo import assignment_collection
 
 from datetime import datetime
 
+from utils.logger import logger
+
 vector_store = get_vector_store()
 
 llm = get_llm()
@@ -26,8 +28,8 @@ def generate_assignment(
 
     for doc, score in results:
 
-        print(
-            f"Assignment Similarity Score: {score}"
+        logger.info(
+            f"Assignment retrieval similarity score: {score:.4f}"
         )
 
         # LOWER SCORE = BETTER MATCH
@@ -39,6 +41,10 @@ def generate_assignment(
     # NO RELEVANT CONTENT
 
     if len(relevant_docs) == 0:
+
+        logger.error(
+            f"No relevant documents found for topic '{topic}'"
+        )
     
         raise ValueError(
             "Topic not found in uploaded PDFs"
@@ -136,6 +142,10 @@ Required Format:
 
     assignment_collection.insert_one(
         assignment_doc
+    )
+
+    logger.info(
+        f"Assignment generated successfully for topic '{topic}'"
     )
 
     return assignment

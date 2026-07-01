@@ -2,6 +2,8 @@ from database.mongo import session_collection
 
 from datetime import datetime
 
+from utils.logger import logger
+
 def create_session(session_id, title="New Chat"):
 
     existing = session_collection.find_one({
@@ -9,6 +11,11 @@ def create_session(session_id, title="New Chat"):
     })
 
     if existing:
+
+        logger.info(
+            f"Reusing existing session {session_id}"
+        )
+
         return
 
     session_collection.insert_one({
@@ -16,6 +23,10 @@ def create_session(session_id, title="New Chat"):
         "title": title,
         "created_at": datetime.utcnow()
     })
+
+    logger.info(
+        f"Created session {session_id}"
+    )
 
 def get_all_sessions():
 
@@ -46,6 +57,10 @@ def update_session_title(
                 "title": title
             }
         }
+    )
+
+    logger.info(
+        f"Updated session title to '{title}'"
     )
 
 def get_session(session_id):
